@@ -1,4 +1,5 @@
 import { Blog } from "../models/blogModel.js";
+import { User } from "../models/userModel.js";
 
 export const getBlogs = async (req, res, next) => {
   try {
@@ -29,8 +30,22 @@ export const getBlog = async (req, res, next) => {
 };
 
 export const createBlog = async (req, res, next) => {
+  const clerkUserId = req.auth?.userId;
+  if (!clerkUserId) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized: Clerk user ID is required.",
+    });
+  }
+  const user = await User.findOne({ clerkUserId });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
+    });
+  }
   try {
-    const blog = new Blog(req.body);
+    const blog = new Blog({ user: user._id, ...req.body });
     const savedBlog = await blog.save();
     res.status(201).json(savedBlog);
   } catch (error) {
@@ -39,7 +54,21 @@ export const createBlog = async (req, res, next) => {
 };
 
 export const deleteBlog = async (req, res, next) => {
-  Blog.findByIdAndDelete(req.params.id)
+  const clerkUserId = req.auth?.userId;
+  if (!clerkUserId) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized: Clerk user ID is required.",
+    });
+  }
+  const user = await User.findOne({ clerkUserId });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
+    });
+  }
+  Blog.findByIdAndDelete({ _id: req.params.id, user: user._id })
     .then((blog) => {
       if (blog) {
         return res

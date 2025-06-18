@@ -3,6 +3,8 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import http from "http";
+import { clerkMiddleware } from '@clerk/express'
+
 // Imports for database connection and routes //
 import connectDB from "./lib/connectDB.js";
 import userRoute from "./routes/userRoute.js";
@@ -11,6 +13,7 @@ import commentRoute from "./routes/commentRoute.js";
 import webhookRoute from "./routes/webhookRoute.js";
 
 const app = express();
+app.use(clerkMiddleware());
 // Server //
 const server = http.createServer(app);
 
