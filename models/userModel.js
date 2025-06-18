@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    clerkId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     username: {
       type: String,
       required: true,
@@ -31,4 +36,4 @@ userSchema.set("toJSON", {
   virtuals: true,
 });
 
-exports.User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
