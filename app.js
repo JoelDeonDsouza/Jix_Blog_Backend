@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import http from "http";
@@ -12,12 +13,11 @@ import webhookRoute from "./routes/webhookRoute.js";
 const app = express();
 // Server //
 const server = http.createServer(app);
-app.use("/webhooks", webhookRoute);
+
 // middleware //
-app.use(express.json());
-dotenv.config();
-// cors fontend connenction //
 app.use(cors());
+app.use("/webhooks", webhookRoute);
+app.use(express.json());
 
 // routes //
 app.use("/users", userRoute);
