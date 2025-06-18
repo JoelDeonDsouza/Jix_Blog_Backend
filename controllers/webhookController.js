@@ -2,7 +2,7 @@ import { Webhook } from "svix";
 import { User } from "../models/userModel.js";
 
 export const clerkWebhookHandler = async (req, res) => {
-  const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
+  const webhookSecret = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
   if (!webhookSecret) {
     console.error("Webhook secret not configured");
     return res.status(500).json({ error: "Webhook secret not configured" });
