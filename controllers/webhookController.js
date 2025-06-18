@@ -9,7 +9,7 @@ export const clerkWebhookHandler = async (req, res) => {
   // Initialize the Webhook with the secret //
   const payload = req.body;
   const headers = req.headers;
-  const wh = new Webhook(secret);
+  const wh = new Webhook(webhookSecret);
   let event;
   try {
     event = wh.verify(payload, headers);
