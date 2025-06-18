@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-
+import http from "http"; 
+// Imports for database connection and routes //
 import connectDB from "./lib/connectDB.js";
 import userRoute from "./routes/userRoute.js";
 import blogRoute from "./routes/blogRoute.js";
@@ -9,10 +10,11 @@ import commentRoute from "./routes/commentRoute.js";
 import webhookRoute from "./routes/webhookRoute.js";
 
 const app = express();
+// Server //
+const server = http.createServer(app); 
 // middleware //
 app.use(express.json());
 dotenv.config();
-
 // cors fontend connenction //
 app.use(cors());
 
@@ -40,7 +42,11 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
-  connectDB();
-  console.log("Server is running on port 3000");
+// Server connection and database initialization //
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, function () {
+  const port = server.address().port;
+  connectDB(); 
+  console.log("Express is running on Port " + port);
 });
+
