@@ -30,27 +30,65 @@ export const getBlog = async (req, res, next) => {
 };
 
 export const createBlog = async (req, res, next) => {
-  const clerkUserId = req.auth?.userId;
-  if (!clerkUserId) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized: Clerk user ID is required.",
-    });
-  }
-  const user = await User.findOne({ clerkUserId });
-  if (!user) {
-    return res.status(404).json({
-      success: false,
-      message: "User not found.",
-    });
-  }
   try {
-    const blog = new Blog({ user: user._id, ...req.body });
+    const { title, clerkUserId, ...blogData } = req.body;
+    if (!clerkUserId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: Clerk user ID is required.",
+      });
+    }
+    // Find user by Clerk ID //
+    const user = await User.findOne({ clerkUserId });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    // Validate required fields //
+    if (!title?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required.",
+      });
+    }
+    // Generate unique slug  //
+    const slug = await generateUniqueSlug(title);
+    // Create and save blog //
+    const blog = new Blog({
+      user: user._id,
+      slug,
+      title: title.trim(),
+      ...blogData,
+    });
     const savedBlog = await blog.save();
-    res.status(201).json(savedBlog);
+    res.status(201).json({
+      success: true,
+      data: savedBlog,
+    });
   } catch (error) {
     next(error);
   }
+};
+
+// Helper function to generate unique slug //
+const generateUniqueSlug = async (title) => {
+  const baseSlug = title
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  let slug = baseSlug;
+  let counter = 2;
+  while (await Blog.findOne({ slug })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  return slug;
 };
 
 export const deleteBlog = async (req, res, next) => {

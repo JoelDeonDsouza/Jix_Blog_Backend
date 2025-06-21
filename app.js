@@ -3,7 +3,8 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import http from "http";
-import { clerkMiddleware } from '@clerk/express'
+import morgan from "morgan";
+import { clerkMiddleware } from "@clerk/express";
 
 // Imports for database connection and routes //
 import connectDB from "./lib/connectDB.js";
@@ -19,6 +20,7 @@ const server = http.createServer(app);
 
 // middleware //
 app.use(cors());
+app.use(morgan("dev"));
 app.use("/webhooks", webhookRoute);
 app.use(express.json());
 
