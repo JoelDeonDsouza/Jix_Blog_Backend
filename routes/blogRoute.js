@@ -4,9 +4,13 @@ import {
   getBlog,
   createBlog,
   deleteBlog,
+  uploadAuth,
 } from "../controllers/blogController.js";
 
 const router = express.Router();
+
+// router for image upload //
+router.get("/upload-auth", uploadAuth);
 
 router.get(`/list`, getBlogs);
 

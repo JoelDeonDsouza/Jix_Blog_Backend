@@ -1,3 +1,4 @@
+import ImageKit from "imagekit";
 import { Blog } from "../models/blogModel.js";
 import { User } from "../models/userModel.js";
 
@@ -121,4 +122,38 @@ export const deleteBlog = async (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+// Initialize ImageKit with error handling //
+const initializeImageKit = () => {
+  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+  const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+  if (!urlEndpoint || !publicKey || !privateKey) {
+    console.error('Missing ImageKit environment variables:', {
+      urlEndpoint: !!urlEndpoint,
+      publicKey: !!publicKey,
+      privateKey: !!privateKey
+    });
+    throw new Error('ImageKit configuration is incomplete. Please check your environment variables.');
+  }
+  return new ImageKit({
+    urlEndpoint,
+    publicKey,
+    privateKey,
+  });
+};
+
+export const uploadAuth = async (req, res, next) => {
+  try {
+    const imagekit = initializeImageKit();
+    const result = imagekit.getAuthenticationParameters();
+    res.send(result);
+  } catch (error) {
+    console.error('ImageKit initialization error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'ImageKit service is not properly configured.',
+    });
+  }
 };
