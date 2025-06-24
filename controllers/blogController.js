@@ -4,13 +4,20 @@ import { User } from "../models/userModel.js";
 
 export const getBlogs = async (req, res, next) => {
   try {
-    const blogList = await Blog.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 2;
+    const blogList = await Blog.find()
+      .populate("user", "username")
+      .limit(limit)
+      .skip((page - 1) * limit);
     if (!blogList) {
       const error = new Error("No blogs found");
       error.status = 404;
       return next(error);
     }
-    res.send(blogList);
+    const totalBlogs = await Blog.countDocuments();
+    const totalPages = page * limit < totalBlogs;
+    res.send({ blogList, totalPages });
   } catch (error) {
     next(error);
   }
@@ -18,7 +25,10 @@ export const getBlogs = async (req, res, next) => {
 
 export const getBlog = async (req, res, next) => {
   try {
-    const blog = await Blog.findOne({ slug: req.params.slug });
+    const blog = await Blog.findOne({ slug: req.params.slug }).populate(
+      "user",
+      "username img"
+    );
     if (!blog) {
       const error = new Error("Blog not found");
       error.status = 404;
@@ -32,7 +42,7 @@ export const getBlog = async (req, res, next) => {
 
 export const createBlog = async (req, res, next) => {
   try {
-    const { title, clerkUserId, ...blogData } = req.body;
+    const { title, clerkUserId, coverImg, ...blogData } = req.body;
     if (!clerkUserId) {
       return res.status(401).json({
         success: false,
@@ -56,13 +66,16 @@ export const createBlog = async (req, res, next) => {
     }
     // Generate unique slug  //
     const slug = await generateUniqueSlug(title);
-    // Create and save blog //
-    const blog = new Blog({
+    // Create blog object
+    const blogObject = {
       user: user._id,
       slug,
       title: title.trim(),
       ...blogData,
-    });
+      coverImg: coverImg || "",
+    };
+    // Create and save blog //
+    const blog = new Blog(blogObject);
     const savedBlog = await blog.save();
     res.status(201).json({
       success: true,
@@ -130,12 +143,14 @@ const initializeImageKit = () => {
   const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
   if (!urlEndpoint || !publicKey || !privateKey) {
-    console.error('Missing ImageKit environment variables:', {
+    console.error("Missing ImageKit environment variables:", {
       urlEndpoint: !!urlEndpoint,
       publicKey: !!publicKey,
-      privateKey: !!privateKey
+      privateKey: !!privateKey,
     });
-    throw new Error('ImageKit configuration is incomplete. Please check your environment variables.');
+    throw new Error(
+      "ImageKit configuration is incomplete. Please check your environment variables."
+    );
   }
   return new ImageKit({
     urlEndpoint,
@@ -150,10 +165,10 @@ export const uploadAuth = async (req, res, next) => {
     const result = imagekit.getAuthenticationParameters();
     res.send(result);
   } catch (error) {
-    console.error('ImageKit initialization error:', error.message);
+    console.error("ImageKit initialization error:", error.message);
     return res.status(500).json({
       success: false,
-      message: 'ImageKit service is not properly configured.',
+      message: "ImageKit service is not properly configured.",
     });
   }
 };
