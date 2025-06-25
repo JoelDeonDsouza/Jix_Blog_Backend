@@ -106,7 +106,7 @@ const generateUniqueSlug = async (title) => {
 };
 
 export const deleteBlog = async (req, res, next) => {
-  const clerkUserId = req.auth?.userId;
+  const { clerkUserId } = req.body;
   if (!clerkUserId) {
     return res.status(401).json({
       success: false,
