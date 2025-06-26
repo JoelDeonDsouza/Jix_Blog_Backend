@@ -1,3 +1,15 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the webhook handler for Clerk webhooks in the Express application.
+ * It processes incoming webhook events, verifies them using the Clerk Webhook library, and handles user creation events.
+ * The handler checks for the existence of a user in the database before creating a new user.
+ * It also includes helper functions to extract the username and email from the event data.
+ * The module uses the Mongoose User model for database operations.
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
+
 import { Webhook } from "svix";
 import { User } from "../models/userModel.js";
 

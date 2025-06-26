@@ -1,3 +1,11 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This is the main entry point for the Express application.
+ * It sets up the server, connects to the database, and configures routes and middleware.
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -25,10 +33,12 @@ app.use("/webhooks", webhookRoute);
 app.use(express.json());
 
 // ImageKit configuration //
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", 
-    "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 

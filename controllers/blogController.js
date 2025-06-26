@@ -1,3 +1,18 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the controllers for blog-related operations in the Express application.
+ * It includes functions for retrieving a list of blogs, retrieving a single blog by slug, creating a new blog,
+ * deleting a blog, and handling image uploads using ImageKit. The module also includes a helper function to generate unique slugs for blogs.
+ * The `getBlogs` function supports pagination and populates the user information for each blog.
+ * The `createBlog` function validates the request data, checks for the existence of the user by Clerk ID, and generates a unique slug before saving the blog.
+ * The `deleteBlog` function checks for user authorization before deleting a blog by its ID.
+ * The `uploadAuth` function initializes ImageKit and returns authentication parameters for image uploads.
+ * The module uses Mongoose models for interacting with the MongoDB database.
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
+
 import ImageKit from "imagekit";
 import { Blog } from "../models/blogModel.js";
 import { User } from "../models/userModel.js";

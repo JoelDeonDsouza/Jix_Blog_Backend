@@ -1,3 +1,13 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the user schema for the MongoDB database using Mongoose.
+ * It includes fields for the Clerk user ID, username, email, profile image, and saved blogs.
+ * The schema also includes timestamps for creation and updates. The `id` virtual field is defined to return the string representation of the MongoDB ObjectId.
+ * The schema is then compiled into a Mongoose model named "User".
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(

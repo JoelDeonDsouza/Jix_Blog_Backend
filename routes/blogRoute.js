@@ -1,3 +1,11 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the routes for blog-related operations in the Express application.
+ * It includes routes for creating, retrieving, and deleting blogs, as well as handling image uploads.
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
 import express from "express";
 import {
   getBlogs,

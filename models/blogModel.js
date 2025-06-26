@@ -1,3 +1,15 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the schema for the Blog model using Mongoose.
+ * It includes fields for user reference, cover image, title, slug, category, description,
+ * content, featured status, and visit count. The schema also includes timestamps for creation and updates.
+ * The `id` virtual field is defined to return the string representation of the MongoDB ObjectId.
+ * The schema is then compiled into a Mongoose model named "Blog".
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
+
 import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema(

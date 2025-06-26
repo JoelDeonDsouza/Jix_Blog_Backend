@@ -1,3 +1,16 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This module defines the controller functions for handling blog comments in the Express application.
+ * It includes functions to get all comments, get comments for a specific blog, create a new comment, and delete a comment.
+ * The comments are associated with users and blogs, and the module handles validation and error management for comment creation and deletion.
+ * The `getComments` function retrieves all comments from the database, while `getBlogComments` fetches comments for a specific blog identified by `blogId`.
+ * The `createComment` function validates the input, finds the user by their Clerk ID, and creates a new comment associated with the user and blog.
+ * The `deleteComment` function allows users to delete their comments by providing their Clerk user ID and the comment ID.
+ * @version: 1.0.1
+ * @date: 2025-06-26
+ */
+
+
 import { Comment } from "../models/commentModel.js";
 import { User } from "../models/userModel.js";
 
