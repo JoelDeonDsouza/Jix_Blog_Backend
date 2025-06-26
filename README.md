@@ -37,32 +37,6 @@ This repository contains the backend server for the **Jix Blog**, built with **J
 
 ---
 
-## 📦 Environment Variables (`.env.local`)
-
-```env
-PORT=10000
-
-# Database
-
-JIX_DATA_BASE_CONNECTION_STRING=
-
-# Clerk configuration
-
-CLERK_WEBHOOK_SIGNING_SECRET=
-
-CLERK_PUBLISHABLE_KEY=
-
-CLERK_SECRET_KEY=
-
-# ImageKit configuration
-
-IMAGEKIT_URL_ENDPOINT=
-
-IMAGEKIT_PUBLIC_KEY=
-
-IMAGEKIT_PRIVATE_KEY=
-```
-
 ## 📚 API Endpoints
 
 #### Blog Routes
@@ -121,4 +95,30 @@ Start the server
 
 ```bash
   npm  start
+```
+
+## 📦 Environment Variables (`.env`)
+
+```env
+PORT=10000
+
+# Database
+
+JIX_DATA_BASE_CONNECTION_STRING=
+
+# Clerk configuration
+
+CLERK_WEBHOOK_SIGNING_SECRET=
+
+CLERK_PUBLISHABLE_KEY=
+
+CLERK_SECRET_KEY=
+
+# ImageKit configuration
+
+IMAGEKIT_URL_ENDPOINT=
+
+IMAGEKIT_PUBLIC_KEY=
+
+IMAGEKIT_PRIVATE_KEY=
 ```
