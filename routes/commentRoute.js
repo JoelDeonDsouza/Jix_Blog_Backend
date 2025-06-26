@@ -7,7 +7,7 @@ router.get("/list", getComments);
 
 router.get("/:blogId", getBlogComments);
 
-router.post("/:blogId", createComment);
+router.post("/", createComment);
 
 router.post("/:id", deleteComment);
 
