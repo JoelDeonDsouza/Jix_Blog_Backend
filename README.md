@@ -46,6 +46,7 @@ This repository contains the backend server for the **Jix Blog**, built with **J
 | GET    | `/blogs/list`        | Get list of all blogs |
 | GET    | `/blogs/:slug`       | Get a blog by slug    |
 | GET    | `/blogs/upload-auth` | Get upload auth token |
+| PATCH  | `/blogs/featured`    | Blog is featured      |
 | POST   | `/blogs/create`      | Create a new blog     |
 | DELETE | `/blogs/delete/:id`  | Delete a blog by ID   |
 
