@@ -13,6 +13,7 @@ import {
   createBlog,
   deleteBlog,
   uploadAuth,
+  featureBlog,
 } from "../controllers/blogController.js";
 
 const router = express.Router();
@@ -27,5 +28,7 @@ router.get("/:slug", getBlog);
 router.post("/create", createBlog);
 
 router.delete("/delete/:id", deleteBlog);
+
+router.patch("/featured", featureBlog);
 
 export default router;

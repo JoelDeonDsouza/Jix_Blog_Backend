@@ -9,9 +9,8 @@
  * The `uploadAuth` function initializes ImageKit and returns authentication parameters for image uploads.
  * The module uses Mongoose models for interacting with the MongoDB database.
  * @version: 1.0.1
- * @date: 2025-06-26
+ * @date: 2025-06-27
  */
-
 
 import ImageKit from "imagekit";
 import { Blog } from "../models/blogModel.js";
@@ -150,6 +149,37 @@ export const deleteBlog = async (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+export const featureBlog = async (req, res, next) => {
+  const { clerkUserId, blogId } = req.body;
+  if (!clerkUserId) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized: Clerk user ID is required.",
+    });
+  }
+  const user = await User.findOne({ clerkUserId });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
+    });
+  }
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    return res.status(404).json({
+      success: false,
+      message: "Blog not found.",
+    });
+  }
+  const isFeatured = blog.isFeatured;
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    blogId,
+    { isFeatured: !isFeatured },
+    { new: true }
+  );
+  res.status(200).json(updatedBlog);
 };
 
 // Initialize ImageKit with error handling //
