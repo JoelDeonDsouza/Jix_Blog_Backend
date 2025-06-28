@@ -9,7 +9,7 @@
  * The `uploadAuth` function initializes ImageKit and returns authentication parameters for image uploads.
  * The module uses Mongoose models for interacting with the MongoDB database.
  * @version: 1.0.1
- * @date: 2025-06-27
+ * @date: 2025-06-28
  */
 
 import ImageKit from "imagekit";
@@ -20,7 +20,36 @@ export const getBlogs = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 2;
-    const blogList = await Blog.find()
+    // Query object to filter blogs by category if provided //
+    const query = {};
+    const cat = req.query.cat;
+    const author = req.query.author;
+    const searchQuery = req.query.searchQuery;
+    const featured = req.query.featured;
+    // Query types //
+    if (cat) {
+      query.category = cat;
+    }
+    if (searchQuery) {
+      query.title = { $regex: searchQuery, $options: "i" };
+    }
+    if (featured) {
+      query.isFeatured = true;
+    }
+    if (author) {
+      const decodedAuthor = decodeURIComponent(author);
+      const user = await User.findOne({
+        username: { $regex: new RegExp(`^${decodedAuthor}$`, "i") },
+      }).select("_id");
+      if (!user) {
+        const error = new Error("User not found");
+        error.status = 404;
+        return next(error);
+      }
+      query.user = user._id;
+    }
+    // If category is provided, add it to the query //
+    const blogList = await Blog.find(query)
       .populate("user", "username")
       .limit(limit)
       .skip((page - 1) * limit);
