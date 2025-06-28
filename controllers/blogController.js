@@ -24,7 +24,7 @@ export const getBlogs = async (req, res, next) => {
     const query = {};
     const cat = req.query.cat;
     const author = req.query.author;
-    const searchQuery = req.query.searchQuery;
+    const searchQuery = req.query.search;
     const featured = req.query.featured;
     // Query types //
     if (cat) {
