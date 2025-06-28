@@ -15,6 +15,7 @@ import {
   uploadAuth,
   featureBlog,
 } from "../controllers/blogController.js";
+import visitCount from "../middlewares/visitCount.js";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.get("/upload-auth", uploadAuth);
 
 router.get(`/list`, getBlogs);
 
-router.get("/:slug", getBlog);
+router.get("/:slug", visitCount, getBlog);
 
 router.post("/create", createBlog);
 

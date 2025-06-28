@@ -30,7 +30,7 @@ export const getComments = async (req, res, next) => {
 };
 
 // getBlogComments function to fetch comments for a specific blog //
-export const getBlogComments = async (req, res, next) => {
+export const getBlogComments = async (req, res) => {
   const comments = await Comment.find({ blog: req.params.blogId })
     .populate("user", "username img")
     .sort({ createdAt: -1 });
@@ -94,7 +94,7 @@ export const createComment = async (req, res, next) => {
 };
 
 // deleteComment function to handle comment deletion //
-export const deleteComment = async (req, res, next) => {
+export const deleteComment = async (req, res) => {
   const { clerkUserId, id } = req.body;
   if (!clerkUserId || !id) {
     return res.status(401).json({

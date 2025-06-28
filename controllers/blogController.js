@@ -180,7 +180,7 @@ export const deleteBlog = async (req, res, next) => {
     });
 };
 
-export const featureBlog = async (req, res, next) => {
+export const featureBlog = async (req, res) => {
   const { clerkUserId, blogId } = req.body;
   if (!clerkUserId) {
     return res.status(401).json({
