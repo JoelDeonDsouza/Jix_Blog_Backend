@@ -7,9 +7,8 @@
  * The `createComment` function validates the input, finds the user by their Clerk ID, and creates a new comment associated with the user and blog.
  * The `deleteComment` function allows users to delete their comments by providing their Clerk user ID and the comment ID.
  * @version: 1.0.1
- * @date: 2025-06-26
+ * @date: 2025-06-29
  */
-
 
 import { Comment } from "../models/commentModel.js";
 import { User } from "../models/userModel.js";
@@ -40,7 +39,8 @@ export const getBlogComments = async (req, res) => {
 // createComment function to handle comment creation //
 export const createComment = async (req, res, next) => {
   try {
-    const { clerkUserId, blogId, desc } = req.body;
+    const { blogId } = req.params;
+    const { clerkUserId, desc } = req.body;
     // Validate required fields //
     if (!clerkUserId || !blogId || !desc) {
       return res.status(400).json({
@@ -71,7 +71,7 @@ export const createComment = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error creating comment:", error);
-    // Handle validation errors
+    // Handle validation errors //
     if (error.name === "ValidationError") {
       return res.status(400).json({
         success: false,
